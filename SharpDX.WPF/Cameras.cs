@@ -364,7 +364,7 @@ namespace SharpDX.WPF
 		/// <param name="e"></param>
 		public void HandleMouseWheel(UIElement ui, MouseWheelEventArgs e)
 		{
-			var dp = e.Delta > 0 ? new Vector3(0, 0, -1) : new Vector3(0, 0, 1);
+			var dp = e.Delta > 0 ? new Vector3(0, 0, 0.5f) : new Vector3(0, 0, 0.5f);
 			KeyMove(dp);
 		}
 
@@ -403,6 +403,18 @@ namespace SharpDX.WPF
 			}
 			e.Handled = true;
 		}
+
+        /// <summary>
+        /// TODO: accept a real angle as a value
+        /// </summary>
+        /// <param name="angle"></param>
+        public void Roll(float angle)
+        {
+            angle *= RotationScaler;
+            var m = Matrix.RotationZ(angle);
+            Up = m.TransformNormal(Up);
+            UpdateView();
+        }
 
 		/// <summary>
 		/// 
