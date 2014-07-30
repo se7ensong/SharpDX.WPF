@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharpDX.WPF.Cameras;
+using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;

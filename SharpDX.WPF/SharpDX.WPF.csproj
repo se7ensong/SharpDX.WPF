@@ -73,6 +73,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cameras\FirstPersonCamera.cs" />
+    <Compile Include="Cameras\ModelViewerCamera.cs" />
     <Compile Include="ConstantBuffer.cs" />
     <Compile Include="D3D11_2D1.cs" />
     <Compile Include="D2D1.cs" />
@@ -85,7 +87,7 @@
     <Compile Include="DXSharing.cs" />
     <Compile Include="DXImageSource.cs" />
     <Compile Include="DXElement.cs" />
-    <Compile Include="Cameras.cs" />
+    <Compile Include="Cameras\BaseCamera.cs" />
     <Compile Include="DXUtils.cs" />
     <Compile Include="FPS.cs" />
     <Compile Include="IDirect3D.cs" />
