@@ -345,7 +345,7 @@ namespace SharpDX.WPF
         /// <param name="e"></param>
         public void HandleMouseWheel(UIElement ui, MouseWheelEventArgs e)
         {
-            var dp = e.Delta > 0 ? new Vector3(0, 0, 0.5f) : new Vector3(0, 0, 0.5f);
+            var dp = e.Delta > 0 ? new Vector3(0, 0, 0.5f) : new Vector3(0, 0, -0.5f);
             KeyMove(dp);
         }
 
