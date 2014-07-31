@@ -14,7 +14,38 @@ namespace SharpDX.WPF.Cameras
     /// </summary>
     public abstract class BaseCamera
     {
-        #region Init
+protected Dictionary<Key, bool> m_downKeys = new Dictionary<Key, bool>();
+
+protected Vector2 m_mouseDownPos, m_mouseLastPos;
+
+protected Quaternion m_viewRotQuat;
+
+private static readonly Vector3 s_zero3 = new Vector3();
+
+private float m_aspect;
+
+private bool m_enableYAxisMovement = true;
+
+private float m_farPlane;
+
+private float m_fov;
+
+private Vector3 m_lookAt, m_defaultLookAt;
+
+        // Field of view
+        // Aspect ratio
+        private float m_nearPlane;
+
+private Vector3 m_position, m_defaultPosition;
+
+private Matrix m_projMat;
+
+private Vector3 m_up, m_defaultUp;
+
+                    // Projection matrix
+        // Near plane
+        // Far plane
+        private Matrix m_viewMat;
 
         /// <summary>
         ///
@@ -26,99 +57,6 @@ namespace SharpDX.WPF.Cameras
             OnInitInteractive();
         }
 
-        #endregion Init
-
-        #region View
-
-        /// <summary>
-        ///
-        /// </summary>
-        public Vector3 LookAt
-        {
-            get { return m_lookAt; }
-            set
-            {
-                m_lookAt = value;
-                UpdateView();
-            }
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        public Vector3 Position
-        {
-            get { return m_position; }
-            set
-            {
-                m_position = value;
-                UpdateView();
-            }
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        public Vector3 Up
-        {
-            get { return m_up; }
-            set
-            {
-                m_up = value;
-                UpdateView();
-            }
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        public Matrix View { get { return m_viewMat; } }
-
-        /// <summary>
-        ///
-        /// </summary>
-        public void Reset()
-        {
-            SetViewParams(m_defaultPosition, m_defaultLookAt, m_defaultUp);
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="eye"></param>
-        /// <param name="lookAt"></param>
-        public void SetViewParams(Vector3 eye, Vector3 lookAt)
-        {
-            SetViewParams(eye, lookAt, m_up);
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="eye"></param>
-        /// <param name="lookAt"></param>
-        /// <param name="vUp"></param>
-        public virtual void SetViewParams(Vector3 eye, Vector3 lookAt, Vector3 vUp)
-        {
-            m_defaultPosition = m_position = eye;
-            m_defaultLookAt = m_lookAt = lookAt;
-            m_defaultUp = m_up = vUp;
-            m_viewRotQuat = Quaternion.Identity;
-            UpdateView();
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        protected virtual void UpdateView()
-        {
-            m_viewMat = Matrix.LookAtLH(m_position, m_lookAt, m_up);
-        }
-
-        #endregion View
-
-        #region Projection
-
         /// <summary>
         ///
         /// </summary>
@@ -129,6 +67,20 @@ namespace SharpDX.WPF.Cameras
             {
                 m_aspect = value;
                 UpdateProj();
+            }
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public bool EnableYAxisMovement
+        {
+            get { return m_enableYAxisMovement; }
+            set
+            {
+                if (value == m_enableYAxisMovement)
+                    return;
+                m_enableYAxisMovement = value;
             }
         }
 
@@ -161,6 +113,24 @@ namespace SharpDX.WPF.Cameras
         /// <summary>
         ///
         /// </summary>
+        public Vector3 LookAt
+        {
+            get { return m_lookAt; }
+            set
+            {
+                m_lookAt = value;
+                UpdateView();
+            }
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public float MoveScaler { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
         public float NearPlane
         {
             get { return m_nearPlane; }
@@ -174,59 +144,43 @@ namespace SharpDX.WPF.Cameras
         /// <summary>
         ///
         /// </summary>
-        public Matrix Projection { get { return m_projMat; } }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="fFOV"></param>
-        /// <param name="fAspect"></param>
-        /// <param name="fNearPlane"></param>
-        /// <param name="fFarPlane"></param>
-        public void SetProjParams(float fFOV, float fAspect, float fNearPlane, float fFarPlane)
+        public Vector3 Position
         {
-            m_fov = fFOV;
-            m_aspect = fAspect;
-            m_nearPlane = fNearPlane;
-            m_farPlane = fFarPlane;
-            UpdateProj();
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        private void UpdateProj()
-        {
-            m_projMat = Matrix.PerspectiveFovLH(m_fov, m_aspect, m_nearPlane, m_farPlane);
-        }
-
-        #endregion Projection
-
-        #region Interaction
-
-        /// <summary>
-        ///
-        /// </summary>
-        public bool EnableYAxisMovement
-        {
-            get { return m_enableYAxisMovement; }
+            get { return m_position; }
             set
             {
-                if (value == m_enableYAxisMovement)
-                    return;
-                m_enableYAxisMovement = value;
+                m_position = value;
+                UpdateView();
             }
         }
 
         /// <summary>
         ///
         /// </summary>
-        public float MoveScaler { get; set; }
+        public Matrix Projection { get { return m_projMat; } }
 
         /// <summary>
         ///
         /// </summary>
         public float RotationScaler { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public Vector3 Up
+        {
+            get { return m_up; }
+            set
+            {
+                m_up = value;
+                UpdateView();
+            }
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public Matrix View { get { return m_viewMat; } }
 
         /// <summary>
         ///
@@ -350,6 +304,14 @@ namespace SharpDX.WPF.Cameras
         }
 
         /// <summary>
+        ///
+        /// </summary>
+        public void Reset()
+        {
+            SetViewParams(m_defaultPosition, m_defaultLookAt, m_defaultUp);
+        }
+
+        /// <summary>
         /// TODO: accept a real angle as a value
         /// </summary>
         /// <param name="angle"></param>
@@ -364,12 +326,53 @@ namespace SharpDX.WPF.Cameras
         /// <summary>
         ///
         /// </summary>
+        /// <param name="fFOV"></param>
+        /// <param name="fAspect"></param>
+        /// <param name="fNearPlane"></param>
+        /// <param name="fFarPlane"></param>
+        public void SetProjParams(float fFOV, float fAspect, float fNearPlane, float fFarPlane)
+        {
+            m_fov = fFOV;
+            m_aspect = fAspect;
+            m_nearPlane = fNearPlane;
+            m_farPlane = fFarPlane;
+            UpdateProj();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
         /// <param name="sRotation"></param>
         /// <param name="sMove"></param>
         public void SetScalers(float sRotation, float sMove)
         {
             RotationScaler = sRotation;
             MoveScaler = sMove;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="eye"></param>
+        /// <param name="lookAt"></param>
+        public void SetViewParams(Vector3 eye, Vector3 lookAt)
+        {
+            SetViewParams(eye, lookAt, m_up);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="eye"></param>
+        /// <param name="lookAt"></param>
+        /// <param name="vUp"></param>
+        public virtual void SetViewParams(Vector3 eye, Vector3 lookAt, Vector3 vUp)
+        {
+            m_defaultPosition = m_position = eye;
+            m_defaultLookAt = m_lookAt = lookAt;
+            m_defaultUp = m_up = vUp;
+            m_viewRotQuat = Quaternion.Identity;
+            UpdateView();
         }
 
         /// <summary>
@@ -445,6 +448,14 @@ namespace SharpDX.WPF.Cameras
         /// <summary>
         ///
         /// </summary>
+        protected virtual void UpdateView()
+        {
+            m_viewMat = Matrix.LookAtLH(m_position, m_lookAt, m_up);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
         /// <param name="k"></param>
         /// <returns></returns>
         private static float GetRollSpeed(Key k)
@@ -502,31 +513,13 @@ namespace SharpDX.WPF.Cameras
             SetScalers((float)Math.PI / 5, 3);
         }
 
-        #endregion Interaction
-
-        #region Fields
-
-        protected Dictionary<Key, bool> m_downKeys = new Dictionary<Key, bool>();
-        protected Vector2 m_mouseDownPos, m_mouseLastPos;
-        protected Quaternion m_viewRotQuat;
-        private static readonly Vector3 s_zero3 = new Vector3();
-        private float m_aspect;
-        private bool m_enableYAxisMovement = true;
-        private float m_farPlane;
-        private float m_fov;
-        private Vector3 m_lookAt, m_defaultLookAt;
-
-        // Field of view
-        // Aspect ratio
-        private float m_nearPlane;
-
-        private Vector3 m_position, m_defaultPosition;
-        private Matrix m_projMat;            // Projection matrix
-        // Near plane
-        // Far plane
-
-        private Vector3 m_up, m_defaultUp;
-        private Matrix m_viewMat;
+        /// <summary>
+        ///
+        /// </summary>
+        private void UpdateProj()
+        {
+            m_projMat = Matrix.PerspectiveFovLH(m_fov, m_aspect, m_nearPlane, m_farPlane);
+        }
 
         #endregion Fields
     }
