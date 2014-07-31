@@ -298,7 +298,7 @@ namespace SharpDX.WPF.Cameras
         /// </summary>
         /// <param name="ui"></param>
         /// <param name="e"></param>
-        public void HandleMouseWheel(UIElement ui, MouseWheelEventArgs e)
+        public virtual void HandleMouseWheel(UIElement ui, MouseWheelEventArgs e)
         {
             var dp = e.Delta > 0 ? new Vector3(0, 0, -1) : new Vector3(0, 0, 1);
             KeyMove(dp);
