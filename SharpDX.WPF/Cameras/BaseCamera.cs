@@ -14,35 +14,35 @@ namespace SharpDX.WPF.Cameras
     /// </summary>
     public abstract class BaseCamera
     {
-protected Dictionary<Key, bool> m_downKeys = new Dictionary<Key, bool>();
+        protected Dictionary<Key, bool> m_downKeys = new Dictionary<Key, bool>();
 
-protected Vector2 m_mouseDownPos, m_mouseLastPos;
+        protected Vector2 m_mouseDownPos, m_mouseLastPos;
 
-protected Quaternion m_viewRotQuat;
+        protected Quaternion m_viewRotQuat;
 
-private static readonly Vector3 s_zero3 = new Vector3();
+        private static readonly Vector3 s_zero3 = new Vector3();
 
-private float m_aspect;
+        private float m_aspect;
 
-private bool m_enableYAxisMovement = true;
+        private bool m_enableYAxisMovement = true;
 
-private float m_farPlane;
+        private float m_farPlane;
 
-private float m_fov;
+        private float m_fov;
 
-private Vector3 m_lookAt, m_defaultLookAt;
+        private Vector3 m_lookAt, m_defaultLookAt;
 
         // Field of view
         // Aspect ratio
         private float m_nearPlane;
 
-private Vector3 m_position, m_defaultPosition;
+        private Vector3 m_position, m_defaultPosition;
 
-private Matrix m_projMat;
+        private Matrix m_projMat;
 
-private Vector3 m_up, m_defaultUp;
+        private Vector3 m_up, m_defaultUp;
 
-                    // Projection matrix
+        // Projection matrix
         // Near plane
         // Far plane
         private Matrix m_viewMat;
@@ -520,7 +520,5 @@ private Vector3 m_up, m_defaultUp;
         {
             m_projMat = Matrix.PerspectiveFovLH(m_fov, m_aspect, m_nearPlane, m_farPlane);
         }
-
-        #endregion Fields
     }
 }
