@@ -197,7 +197,8 @@ namespace SharpDX.WPF.Cameras
             }
 
             KeyMove(speed * (float)elapsed.TotalSeconds);
-            KeyRoll(rSpeed * (float)elapsed.TotalSeconds);
+            //KeyRoll(rSpeed * (float)elapsed.TotalSeconds);
+            KeyRotateHorizontal(rSpeed * (float)elapsed.TotalSeconds);
         }
 
         /// <summary>
@@ -427,6 +428,23 @@ namespace SharpDX.WPF.Cameras
             angle *= RotationScaler;
             var m = Matrix.RotationZ(angle);
             Up = m.TransformNormal(Up);
+            UpdateView();
+        }
+
+        protected virtual void KeyRotateHorizontal(float angle)
+        {
+            angle *= RotationScaler;
+
+            var m = Matrix.RotationY(angle);
+            Position = m.TransformNormal(Position);
+            Up = m.TransformNormal(Up);
+            LookAt = m.TransformNormal(LookAt);
+
+            var m2 = Matrix.RotationZ(angle);
+            Position = m2.TransformNormal(Position);
+            Up = m2.TransformNormal(Up);
+            LookAt = m2.TransformNormal(LookAt);
+
             UpdateView();
         }
 
