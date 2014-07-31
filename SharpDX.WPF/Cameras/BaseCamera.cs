@@ -300,11 +300,8 @@ namespace SharpDX.WPF.Cameras
         /// <param name="e"></param>
         public void HandleMouseWheel(UIElement ui, MouseWheelEventArgs e)
         {
-            float zoomModifier = 0.3f;
-            Position = new Vector3(Position.X + (e.Delta > 0 ? -zoomModifier : zoomModifier), Position.Y + (e.Delta > 0 ? -zoomModifier : zoomModifier), Position.Z + (e.Delta > 0 ? zoomModifier : -zoomModifier));
-            LookAt = new Vector3(LookAt.X + (e.Delta > 0 ? -zoomModifier : zoomModifier), LookAt.Y + (e.Delta > 0 ? -zoomModifier : zoomModifier), LookAt.Z + (e.Delta > 0 ? zoomModifier : -zoomModifier));
-
-            UpdateView();
+            var dp = e.Delta > 0 ? new Vector3(0, 0, -1) : new Vector3(0, 0, 1);
+            KeyMove(dp);
         }
 
         /// <summary>
